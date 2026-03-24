@@ -1,3 +1,12 @@
+import { TABLE_CONFIG } from "../constants/constants";
+
+/**
+ * Sort rows by given column and order.
+ *
+ * @param {Object|null} sortConfig - sorting state. e.g. { key, order }
+ * @param {Array<Object>} rows - table rows to sort.
+ * @returns {Array<Object>} sorted rows (new array, original is untouched).
+ */
 export function sortRows(sortConfig, rows) {
   if (!sortConfig) return rows;
   const { key, order } = sortConfig;
@@ -6,7 +15,8 @@ export function sortRows(sortConfig, rows) {
     const aValue = a[key];
     const bValue = b[key];
     if (aValue === bValue) return 0;
-    if (order === "asc") {
+    // sorting for string and numbers
+    if (order === TABLE_CONFIG.SORT_ORDER_ASCENDING) {
       return aValue > bValue ? 1 : -1;
     }
     return aValue < bValue ? 1 : -1;

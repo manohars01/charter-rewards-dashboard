@@ -1,30 +1,35 @@
 import PropTypes from "prop-types";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import TablePagination from "./TablePagination";
 import TableControls from "./TableControls";
+import { TABLE_CONFIG } from "../../../constants/constants";
 import { filterRows, sortRows, paginateRows } from "../../../utils/tableUtils";
 import "./Table.css";
 
+/**
+ * A generic table component with search, sort, and pagination features.
+ *
+ * @param {Object} props
+ * @param {Array<{key: string, header: string, sortable?: boolean}>} props.columns
+ * @param {Array<Object>} props.rows
+ * @param {boolean} [props.canSearch=true]
+ * @param {number} [props.defaultRowsPerPage=TABLE_CONFIG.DEFAULT_ROWS_PER_PAGE]
+ * @param {Array<number>} [props.rowsPerPageOptions=TABLE_CONFIG.DEFAULT_ROWS_PER_PAGE_OPTIONS]
+ * @param {string} [props.tableTitle=""]
+ * @returns {JSX.Element}
+ */
 function Table({
   columns = [],
   rows = [],
   canSearch = true,
-  defaultRowsPerPage = 10,
-  rowsPerPageOptions = [5, 10, 20, 50],
+  defaultRowsPerPage = TABLE_CONFIG.DEFAULT_ROWS_PER_PAGE,
+  rowsPerPageOptions = TABLE_CONFIG.DEFAULT_ROWS_PER_PAGE_OPTIONS,
   tableTitle = "",
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
   const [sortConfig, setSortConfig] = useState(null);
-  const [debouncedSearch, setDebouncedSearch] = useState(searchValue);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(searchValue);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [searchValue]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -45,18 +50,18 @@ function Table({
     setCurrentPage(1);
     setSortConfig((prev) => {
       if (!prev || prev.key !== column.key) {
-        return { key: column.key, order: "asc" };
+        return { key: column.key, order: TABLE_CONFIG.SORT_ORDER_ASCENDING };
       }
-      if (prev.order === "asc") {
-        return { key: column.key, order: "desc" };
+      if (prev.order === TABLE_CONFIG.SORT_ORDER_ASCENDING) {
+        return { key: column.key, order: TABLE_CONFIG.SORT_ORDER_DESCENDING };
       }
       return null;
     });
   };
 
   const filteredRows = useMemo(
-    () => filterRows(canSearch, debouncedSearch, rows, columns),
-    [canSearch, debouncedSearch, rows, columns],
+    () => filterRows(canSearch, searchValue, rows, columns),
+    [canSearch, searchValue, rows, columns],
   );
 
   const sortedRows = useMemo(
@@ -102,7 +107,7 @@ function Table({
                     {sortable && (
                       <span className="sort-indicator">
                         {isSorted
-                          ? order === "asc"
+                          ? order === TABLE_CONFIG.SORT_ORDER_ASCENDING
                             ? " ▲"
                             : " ▼"
                           : " ⇅"}
@@ -117,7 +122,7 @@ function Table({
             {paginatedRows.length === 0 && (
               <tr>
                 <td colSpan={columns.length} className="no-data">
-                  No data to show
+                  {TABLE_CONFIG.NO_DATA}
                 </td>
               </tr>
             )}
