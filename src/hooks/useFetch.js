@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ERROR_MESSAGES } from "../constants/constants";
-
+import { logger } from "../utils/logger";
 /**
  * Hook to fetch data from an API.
  *
@@ -21,10 +21,13 @@ export default function useFetch(fetcher) {
     const fetchData = async () => {
       try {
         setLoading(true);
+        setError(null);
         const result = await fetcher();
-        if (!ignore) setData(result);
+        if (!ignore) setData(Array.isArray(result) ? result : []);
       } catch (err) {
-        if (!ignore) setError(err?.message || ERROR_MESSAGES.GENERIC_ERROR);
+        const message = err?.message || ERROR_MESSAGES.GENERIC_ERROR;
+        logger.error("useFetch failed:", err);
+        if (!ignore) setError({ message });
       } finally {
         if (!ignore) setLoading(false);
       }

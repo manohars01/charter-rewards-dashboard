@@ -69,6 +69,10 @@ export default function App() {
 
   const { tableTitle, columns, rowsMap } = TABLE_VIEWS[view];
 
+  const handleViewChange = (e) => {
+    setView(e.target.value);
+  };
+
   const rows = useMemo(() => {
     return rowsMap(transactions);
   }, [transactions, rowsMap]);
@@ -92,7 +96,7 @@ export default function App() {
   if (error) {
     return (
       <Card>
-        <ErrorMessage message={error} />
+        <ErrorMessage message={error?.message} />
       </Card>
     );
   }
@@ -103,11 +107,7 @@ export default function App() {
         <h1>{UI_TEXT.DASHBOARD_TITLE}</h1>
         <div className="table-view-selector">
           <label htmlFor="view-dropdown">Select View:</label>
-          <select
-            id="view-dropdown"
-            value={view}
-            onChange={(e) => setView(e.target.value)}
-          >
+          <select id="view-dropdown" value={view} onChange={handleViewChange}>
             <option value="transactions">Transactions</option>
             <option value="monthlyRewards">Monthly Rewards</option>
             <option value="totalRewards">Total Rewards</option>

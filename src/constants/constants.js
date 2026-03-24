@@ -1,3 +1,4 @@
+
 // Error messages
 export const ERROR_MESSAGES = {
   GENERIC_ERROR: "Something went wrong.",
@@ -18,6 +19,7 @@ export const TABLE_CONFIG = {
 export const UI_TEXT = {
   DASHBOARD_TITLE: "Customer Rewards Dashboard",
   LOADING_TRANSACTIONS: "Loading transactions...",
+  TRANSACTIONS_LOADED_SUCCESSFULLY: "Transactions loaded successfully!",
   TABLE_TITLE_TRANSACTIONS: "Transactions",
   TABLE_TITLE_TOTAL_REWARDS: "Total Rewards",
   TABLE_TITLE_MONTHLY_REWARDS: "Monthly Rewards",
@@ -26,5 +28,7 @@ export const UI_TEXT = {
 
 // Constants for transactions API calls
 export const TRANSACTIONS_API_MESSAGES = {
+  TRANSACTIONS_FETCHING_MSG: "Fetching transactions...",
+  TRANSACTIONS_FETCHED_SUCCESSFULLY: "Transactions fetched successfully!",
   TRANSACTIONS_FETCH_FAILED: "Failed to fetch transactions.",
 };
