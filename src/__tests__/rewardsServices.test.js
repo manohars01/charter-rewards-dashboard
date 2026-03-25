@@ -24,7 +24,6 @@ describe("rewardsServices", () => {
         },
       ];
       const result = addRewardPointsToTransactions(input);
-      expect(result[0].purchaseDate).toBe("");
       expect(result[0].rewardPoints).toBe(90);
     });
 

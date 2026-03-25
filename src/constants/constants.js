@@ -1,3 +1,7 @@
+// App config
+export const APP_CONFIG = {
+  SEARCH_DEBOUNCE_TIME: 300,
+};
 
 // Error messages
 export const ERROR_MESSAGES = {

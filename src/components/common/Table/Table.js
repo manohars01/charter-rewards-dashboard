@@ -2,7 +2,8 @@ import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import TablePagination from "./TablePagination";
 import TableControls from "./TableControls";
-import { TABLE_CONFIG } from "../../../constants/constants";
+import useDebounce from "../../../hooks/useDebounce";
+import { APP_CONFIG, TABLE_CONFIG } from "../../../constants/constants";
 import { filterRows, sortRows, paginateRows } from "../../../utils/tableUtils";
 import "./Table.css";
 
@@ -30,6 +31,11 @@ function Table({
   const [searchValue, setSearchValue] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
   const [sortConfig, setSortConfig] = useState(null);
+
+  const debouncedSearch = useDebounce(
+    searchValue,
+    APP_CONFIG.SEARCH_DEBOUNCE_TIME,
+  );
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -60,8 +66,8 @@ function Table({
   };
 
   const filteredRows = useMemo(
-    () => filterRows(canSearch, searchValue, rows, columns),
-    [canSearch, searchValue, rows, columns],
+    () => filterRows(canSearch, debouncedSearch, rows, columns),
+    [canSearch, debouncedSearch, rows, columns],
   );
 
   const sortedRows = useMemo(

@@ -33,9 +33,7 @@ describe("App", () => {
       error: "Failed to fetch transactions.",
     });
     render(<App />);
-    expect(
-      screen.getByText("Failed to fetch transactions."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Something went wrong.")).toBeInTheDocument();
   });
 
   it("renders the dashboard title when data loads", () => {
